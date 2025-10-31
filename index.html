@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Ryu offc — Cyberpunk Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        :root {
+            --glow1: #00ffff;
+            --glow2: #ff00ff;
+            --dark: #0d0d1a;
+            --glass: rgba(0, 0, 0, .35);
+            --radius: 16px;
+        }
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',monospace}
+
+        body {
+            background-image: url('https://files.catbox.moe/9vehvx.jpeg'); 
+            background-color: var(--dark); 
+            background-size: cover; 
+            background-position: center center;
+            background-repeat: no-repeat;
+            
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: transparent; 
+            opacity: 0; 
+            z-index: 0;
+        }
+        @keyframes bgMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #particles {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--glow1);
+            box-shadow: 0 0 6px var(--glow1);
+            animation: float 6s linear infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(1); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,.1);
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10; 
+        }
+        header .logo {
+            font-weight: 900;
+            font-size: 22px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px var(--glow1);
+        }
+        header .icon-group {
+            display: flex;
+            align-items: center;
+            gap: 10px; 
+            padding: 5px; 
+            border-radius: 50px; 
+            box-shadow: 0 0 15px var(--glow2); 
+            background: rgba(255, 0, 255, 0.1); 
+            border: 1px solid rgba(255, 0, 255, 0.3);
+        }
+        header .icon {
+            font-size: 24px;
+            cursor: pointer;
+            padding: 6px 10px; 
+            border-radius: 50%;
+            transition: .2s;
+            text-shadow: 0 0 8px var(--glow2);
+            display: inline-block; 
+        }
+        header .icon:hover {
+            background: rgba(255,0,255,.2); 
+        }
+
+        header .icon.wa {
+            color: var(--glow1); 
+            text-shadow: 0 0 8px #00ff00; 
+            border: 1px solid #00ff00;
+        }
+        header .icon.wa:hover {
+             background: rgba(0, 255, 0, 0.2); 
+             box-shadow: 0 0 15px #00ff00;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2; 
+            max-width: 480px;
+            margin: 40px auto;
+            padding: 0 16px;
+            animation: fadeIn .8s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 28px;
+            font-size: 24px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px var(--glow1);
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(0,255,255,.25);
+            transition: .3s;
+        }
+        .card:hover {
+            box-shadow: 0 0 30px rgba(255,0,255,.45);
+            transform: translateY(-4px);
+        }
+        .card div strong {
+            font-size: 14px;
+            color: rgba(255,255,255,.7);
+        }
+        .card div span {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 0 6px var(--glow1);
+        }
+        .btn {
+            background: transparent;
+            color: var(--glow1);
+            border: 1px solid var(--glow1);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+            box-shadow: 0 0 8px var(--glow1);
+        }
+        .btn:hover {
+            background: var(--glow1);
+            color: var(--dark);
+            box-shadow: 0 0 20px var(--glow1);
+        }
+
+        ul.list {
+            list-style: none;
+        }
+        ul.list li {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,.1);
+            margin-bottom: 12px;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 500;
+            box-shadow: 0 0 12px rgba(0,255,255,.15);
+            transition: .2s;
+            cursor: pointer; 
+        }
+        ul.list li:hover {
+            box-shadow: 0 0 20px rgba(255,0,255,.35);
+        }
+        
+        .sub-list { 
+            list-style: none;
+            padding-left: 15px;
+            margin-top: 8px;
+            font-size: 14px;
+            color: var(--glow1);
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            max-height: 500px; 
+            opacity: 1;
+            overflow: hidden;
+        }
+        .sub-list li {
+            background: none;
+            border: none;
+            padding: 4px 0;
+            margin-bottom: 4px;
+            box-shadow: none;
+            transition: none;
+            cursor: default;
+        }
+        .sub-list li:hover {
+             transform: none;
+             box-shadow: none;
+        }
+        
+        .hidden-sublist {
+            display: none; 
+        }
+
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 100; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.85); 
+            backdrop-filter: blur(8px);
+            padding-top: 50px;
+        }
+
+        .modal-content {
+            background: var(--dark);
+            border: 2px solid var(--glow1);
+            border-radius: var(--radius);
+            margin: 0 auto; 
+            padding: 30px 20px;
+            width: 90%; 
+            max-width: 400px; 
+            position: relative;
+            box-shadow: 0 0 30px var(--glow1);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-btn {
+            color: #fff;
+            position: absolute; 
+            top: 10px;
+            right: 20px;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0 5px;
+            text-shadow: 0 0 8px var(--glow2);
+            z-index: 101;
+        }
+        .close-btn:hover, .close-btn:focus {
+            color: var(--glow2);
+            text-decoration: none;
+        }
+
+        .modal-content h2 {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-size: 26px;
+            text-shadow: 0 0 10px var(--glow1);
+        }
+
+        .qris-instruction {
+            text-align: center;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 20px;
+        }
+
+        .qris-box {
+            background: #fff;
+            padding: 10px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 0 15px var(--glow2);
+        }
+        .qris-box img {
+            width: 100%;
+            height: auto;
+            max-width: 300px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .qris-steps {
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        .qris-steps ol {
+            list-style-type: none;
+            padding-left: 0;
+            font-size: 14px;
+        }
+        .qris-steps ol li {
+            margin-bottom: 8px;
+            border-left: 3px solid var(--glow1);
+            padding-left: 10px;
+            font-weight: 500;
+        }
+        
+        .modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+            text-decoration: none; 
+            display: block; 
+        }
+        .modal-btn.made {
+            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.5);
+        }
+        .modal-btn.made:hover {
+            box-shadow: 0 4px 20px rgba(37, 117, 252, 0.7);
+            opacity: 0.9;
+        }
+        .modal-btn.confirm {
+            background: linear-gradient(90deg, #00b09b 0%, #96c93d 100%);
+            color: var(--dark);
+            box-shadow: 0 4px 15px rgba(0, 176, 155, 0.5);
+        }
+        .modal-btn.confirm:hover {
+            box-shadow: 0 4px 20px rgba(150, 201, 61, 0.7);
+            opacity: 0.9;
+        }
+
+        .calc-wrapper {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(0,255,255,.25);
+        }
+        #calcDisplay {
+            width: 100%;
+            font-size: 28px;
+            padding: 12px;
+            margin-bottom: 14px;
+            border: 1px solid rgba(255,255,255,.2);
+            border-radius: 8px;
+            background: rgba(0,0,0,.4);
+            color: #fff;
+            text-align: right;
+            letter-spacing: 2px;
+            box-shadow: inset 0 0 8px rgba(0,255,255,.3);
+        }
+        .calc-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .calc-btn {
+            padding: 18px 0;
+            font-size: 20px;
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 12px;
+            background: rgba(255,255,255,.08);
+            color: #fff;
+            cursor: pointer;
+            transition: .2s;
+            box-shadow: 0 0 8px rgba(0,255,255,.15);
+        }
+        .calc-btn:hover {background: rgba(255,255,255,.15); box-shadow: 0 0 16px var(--glow1);}
+        .calc-btn.op {background: rgba(255,0,255,.15); border-color: var(--glow2); box-shadow: 0 0 12px var(--glow2);}
+        .calc-btn.eq {background: rgba(0,255,255,.25); border-color: var(--glow1); box-shadow: 0 0 12px var(--glow1); grid-column: span 2;}
+        .hidden {display:none;}
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<audio id="backgroundMusic" controls loop style="display:none;">
+    <source src="https://files.catbox.moe/i63wkq.mp3" type="audio/mp3">
+</audio>
+
+<div id="particles"></div>
+
+<header>
+    <div class="logo">PAYMENT Ryu</div>
+    <div class="icon-group">
+        <a href="https://wa.me/628811147684" target="_blank" class="icon wa" title="Hubungi via WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <span class="icon" id="menuBtn">☰</span>
+        <span class="icon" id="profileBtn">👤</span>
+    </div>
+</header>
+
+<div id="homePage" class="container">
+    <h2>Selamat Datang Di Payment Ryu Official</h2>
+
+    <div class="card" id="qrisCard">
+        <div>
+            <strong>QRIS (All Payment)</strong><br>
+            <span id="qrisId">Scan untuk membayar</span>
+        </div>
+        <button class="btn" onclick="toggleQrisModal()">Tampilkan QR</button>
+    </div>
+
+    <div class="card"><div><strong>DANA</strong><br><span id="dana">08811147684</span></div><button class="btn" onclick="copyText('dana')">Copy</button></div>
+    <div class="card"><div><strong>WhatsApp</strong><br><span id="wa">08811147684</span></div><button class="btn" onclick="copyText('wa')">Copy</button></div>
+    <div class="card"><div><strong>TikTok</strong><br><span id="tiktok">@prastya123</span></div><button class="btn" onclick="copyText('tiktok')">Copy</button></div>
+</div>
+
+<div id="menuPage" class="container hidden">
+    <h2>PILIHAN PRODUK</h2>
+    <ul class="list">
+        <li onclick="showPage('listPanelPage')">List Panel</li>
+        <li onclick="showPage('listScriptPage')">List Script & Layanan</li>
+        <li onclick="showPage('calcPage')">Kalkulator</li>
+    </ul>
+    <button class="btn" onclick="showPage('homePage')">Kembali</button>
+</div>
+
+<div id="listPanelPage" class="container hidden">
+    <h2>LIST PANEL</h2>
+    <ul class="list">
+        <li onclick="toggleSublist(this)">
+            Panel Pterodactyl
+            <ul class="sub-list hidden-sublist">
+                <li>1 GB Rp 1.000</li>
+                <li>2 GB Rp 2.000</li>
+                 <li>3 GB Rp 3.000</li>
+                  <li>4 GB Rp 4.000</li>
+                   <li>5 GB Rp 5.000</li>
+                    <li>6 GB Rp 6.000</li>
+                     <li>7 GB Rp 7.000</li>
+                      <li>8 GB Rp 8.000</li>
+                <li>Unlimited RAM:Rp 8.000</li>
+            </ul>
+        </li>
+        
+        <li onclick="toggleSublist(this)">
+            Panel private
+            <ul class="sub-list hidden-sublist">
+               <li>1 GB Rp2.000</li>
+                <li>2 GB Rp3.000</li>
+                 <li>3 GB Rp4.000</li>
+                  <li>4 GB Rp5.000</li>
+                   <li>5 GB Rp6.000</li>
+                    <li>6 GB Rp7.000</li>
+                     <li>7 GB Rp8.000</li>
+                      <li>Unli RAM Rp12.000</li>
+            </ul>
+        </li>
+
+        <li onclick="toggleSublist(this)">
+            Adp & Ress
+            <ul class="sub-list hidden-sublist">
+                 <li>Admin Panel: Rp 20.000</li>
+                 <li>Resseler Panel: Rp 10.000</li>
+            </ul>
+        </li>
+        
+        <li onclick="toggleSublist(this)">
+            Sc bot
+            <ul class="sub-list hidden-sublist">
+                <li>Script Md: Rp 50.000</li>
+                <li>Script Bug justin: Rp 50.000 (no up)</li>
+                <li>Justi Full up: Rp 80.000</li>
+                <li>Script Cpanel Tele: Rp 25.000</li>
+                <li>Sc bug crasher: Rp 30.000</li>
+            </ul>
+        </li>
+        
+    </ul>
+    <button class="btn" onclick="showPage('menuPage')">Kembali ke Menu</button>
+</div>
+
+<div id="listScriptPage" class="container hidden">
+    <h2>LIST LAYANAN</h2>
+    <ul class="list">
+        <li>– Top-Up</li>
+        <li>– Script Bot WhatsApp</li>
+        <li>– Banned / Unbanned</li>
+        <li>– Aplikasi QRIS No KTP</li>
+        <li>– Aplikasi Nonton Bioskop</li>
+        <li>– 150 Aplikasi JB</li>
+    </ul>
+    <button class="btn" onclick="showPage('menuPage')">Kembali ke Menu</button>
+</div>
+
+<div id="calcPage" class="container hidden">
+    <h2>KALKULATOR</h2>
+    <div class="calc-wrapper">
+        <input id="calcDisplay" type="text" disabled>
+        <div class="calc-grid">
+            <button class="calc-btn" onclick="calcPress('7')">7</button>
+            <button class="calc-btn" onclick="calcPress('8')">8</button>
+            <button class="calc-btn" onclick="calcPress('9')">9</button>
+            <button class="calc-btn op" onclick="calcPress('/')">÷</button>
+            <button class="calc-btn" onclick="calcPress('4')">4</button>
+            <button class="calc-btn" onclick="calcPress('5')">5</button>
+            <button class="calc-btn" onclick="calcPress('6')">6</button>
+            <button class="calc-btn op" onclick="calcPress('*')">×</button>
+            <button class="calc-btn" onclick="calcPress('1')">1</button>
+            <button class="calc-btn" onclick="calcPress('2')">2</button>
+            <button class="calc-btn" onclick="calcPress('3')">3</button>
+            <button class="calc-btn op" onclick="calcPress('-')">−</button>
+            <button class="calc-btn" onclick="calcPress('0')">0</button>
+            <button class="calc-btn" onclick="calcClear()">C</button>
+            <button class="calc-btn eq" onclick="calcEqual()">=</button>
+            <button class="calc-btn op" onclick="calcPress('+')">+</button>
+        </div>
+    </div>
+    <button class="btn" style="margin-top:16px" onclick="showPage('menuPage')">Kembali</button>
+</div>
+
+<div id="profilePage" class="container hidden">
+    <h2>PROFIL Ryu</h2>
+    <div class="card">
+        <ul class="list profile-list">
+            <li><strong>Nama:</strong> Ryu Official</li>
+            <li><strong>Nomor Admin (WA):</strong> 08811147684</li>
+            <li><strong>Tujuan Website:</strong> Memudahkan kalian menghubungi admin Ryu </li>
+        </ul>
+    </div>
+    <button class="btn" onclick="showPage('homePage')">Kembali</button>
+</div>
+
+<div id="qrisModal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-btn" onclick="toggleQrisModal()">×</span>
+        <h2>QRIS Payment</h2>
+        <p class="qris-instruction">Scan qris di bawah ini untuk melakukan pembayaran</p>
+        
+        <div class="qris-box">
+            <img src="https://files.catbox.moe/yt4st6.jpg" alt="QRIS Code Besar"> 
+        </div>
+
+        <div class="qris-steps">
+            <ol>
+                <li>Buka aplikasi perbankan Anda</li>
+                <li>Pilih pembayaran QRIS</li>
+                <li>Pindai kode ini</li>
+                <li>Konfirmasikan pembayaran</li>
+            </ol>
+        </div>
+        
+        <div class="modal-actions">
+            <button class="modal-btn made" onclick="alert('Pembayaran Sudah Dibuat!')">I've Made the Payment</button>
+            <a href="https://wa.me/628811147684" target="_blank" class="modal-btn confirm">Confirm via WA</a>
+        </div>
+    </div>
+</div>
+
+<script>
+function showPage(pageId){document.querySelectorAll('.container').forEach(c=>c.classList.add('hidden'));document.getElementById(pageId).classList.remove('hidden');}
+function copyText(id){const t=document.getElementById(id).innerText;navigator.clipboard.writeText(t);alert('Tersalin: '+t);}
+document.getElementById('menuBtn').onclick=()=>showPage('menuPage');
+document.getElementById('profileBtn').onclick=()=>showPage('profilePage');
+
+function toggleQrisModal() {
+    const modal = document.getElementById('qrisModal');
+    if (modal.style.display === 'block') {
+        modal.style.display = 'none';
+    } else {
+        modal.style.display = 'block';
+    }
+}
+
+const particles=document.getElementById('particles');function createParticle(){const p=document.createElement('div');p.className='particle';p.style.left=Math.random()*100+'%';p.style.animationDuration=(Math.random()*3+3)+'s';p.style.opacity=Math.random();particles.appendChild(p);setTimeout(()=>p.remove(),6000);}setInterval(createParticle,100);
+
+function toggleSublist(element) {
+    const sublist = element.querySelector('.sub-list');
+    
+    if (sublist) {
+        document.querySelectorAll('#listPanelPage .sub-list').forEach(list => {
+            if (list !== sublist && !list.classList.contains('hidden-sublist')) {
+                list.classList.add('hidden-sublist');
+            }
+        });
+        
+        sublist.classList.toggle('hidden-sublist');
+    }
+}
+
+const display = document.getElementById('calcDisplay');
+let currentInput = '';
+let operator = null;
+let firstOperand = null;
+
+function calcPress(value) {
+    if (value >= '0' && value <= '9' || value === '.') {
+        if (value === '.' && currentInput.includes('.')) return;
+        currentInput += value;
+    } else if (['+', '-', '*', '/'].includes(value)) {
+        if (currentInput !== '' && firstOperand === null) {
+            firstOperand = parseFloat(currentInput);
+            operator = value;
+            currentInput = '';
+        } else if (currentInput !== '' && firstOperand !== null) {
+            calcEqual();
+            operator = value;
+        } else if (firstOperand !== null && currentInput === '') {
+            operator = value;
+        }
+    }
+    updateDisplay();
+}
+
+function updateDisplay() {
+    let displayValue = '';
+    if (firstOperand !== null) {
+        displayValue += firstOperand;
+    }
+    
+    if (operator !== null) {
+        let displayOperator = operator;
+        if (operator === '*') displayOperator = '×';
+        if (operator === '/') displayOperator = '÷';
+        displayValue += ' ' + displayOperator;
+    }
+    
+    displayValue += ' ' + currentInput;
+    
+    if (displayValue.trim() === '') {
+        display.value = '0';
+    } else {
+        display.value = displayValue.trim();
+    }
+}
+
+
+function calcEqual() {
+    if (firstOperand === null || operator === null || currentInput === '') return;
+
+    const secondOperand = parseFloat(currentInput);
+    let result = 0;
+
+    try {
+        switch (operator) {
+            case '+': result = firstOperand + secondOperand; break;
+            case '-': result = firstOperand - secondOperand; break;
+            case '*': result = firstOperand * secondOperand; break;
+            case '/': 
+                if (secondOperand === 0) {
+                    display.value = "Error: Division by Zero";
+                    calcClear();
+                    return;
+                }
+                result = firstOperand / secondOperand; 
+                break;
+            default: return;
+        }
+
+        firstOperand = result;
+        currentInput = '';
+        operator = null;
+        
+        display.value = parseFloat(result.toFixed(10)).toString();
+
+    } catch (e) {
+        display.value = "Error";
+        calcClear();
+    }
+}
+
+function calcClear() {
+    currentInput = '';
+    operator = null;
+    firstOperand = null;
+    display.value = '0';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const music = document.getElementById('backgroundMusic');
+    if (music) {
+        music.volume = 0.5; 
+        music.play().catch(error => {
+            console.log("Autoplay diblokir.");
+        });
+    }
+    calcClear(); 
+});
+
+</script>
+
+</body>
+</html>
